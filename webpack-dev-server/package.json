@@ -1,0 +1,12 @@
+{
+  "name": "webpack-DevServer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "html-webpack-plugin": "4.0.4",
+    "webpack": "4.16.5",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.11.3"
+  }
+}

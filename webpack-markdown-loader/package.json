@@ -1,0 +1,13 @@
+{
+  "name": "webpack-markdownloader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "webpack": "4.16.5",
+    "webpack-cli": "3.3.11"
+  },
+  "devDependencies": {
+    "markdown-it": "^13.0.1"
+  }
+}
