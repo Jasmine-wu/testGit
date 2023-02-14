@@ -2,8 +2,6 @@
 
 
 
-
-
 默认打包入口文件:src/index.js
 默认打包输出文件: dist/main.js
 
@@ -40,8 +38,6 @@
 - development    
 
 #### 方式1
-·```js
-
 
 ```
 
@@ -143,6 +139,9 @@ yarn add xxxx@版本号 -D
 #### - clean-webpack-plugin
 - 每次打包前自动清理打包输出目录
 #### - html-webpack-plugin
+
+- yarn add html-webpack-plugin@4.0.4 -D
+
 - 需求1:
 	- 发布的时候要同时发布dist目录下的打包结果以及项目根目录下的html文件
 	
@@ -169,10 +168,10 @@ yarn add xxxx@版本号 -D
 
 #### - 理想的webpack开发环境：
 
-- 修改了代码能自动帮我们重新构建
+- 1.修改了代码能自动帮我们重新构建
   - 	yarn webpack --watch , web pack wathc模式能实时监听文件变化，自动编译
 
-- 浏览器能自动刷新显示最新的内容
+- 2.浏览器能自动刷新显示最新的内容
 
   - 不要用serve启动http服务， 每次启动都要serve . 然后手动点刷新
 
@@ -185,15 +184,18 @@ yarn add xxxx@版本号 -D
 
 #### - webpack Dev Server
 
+
 - 内部集成了自动编译和自动刷新浏览器功能
 
   - yarn add webpack-dev-server@3.11.3 -D
-  - yarn webpack-dev-server
-  - 注意：使用webpack Dev Server打包的内容并没有放到（磁盘中）打包输出目录中而是直接放到了内存中，从内存中读取省掉了磁盘读写操作，大大提高了启动效率
-
   
+  - yarn webpack-dev-server
 
-##### - devServer ：
+  - 注意：使用webpack Dev Server打包的内容并没有放到（磁盘中）打包输出目录中而是直接放到了内存中，从内存中读取省掉了磁盘读写操作，大大提高了启动效率
+  
+    
+
+在webpack.config.js文件中增加配置项devServer ：
 
 ###### - contentBase：
 
@@ -231,17 +233,80 @@ yarn add xxxx@版本号 -D
 
   跨域问题是浏览器和服务器之间的问题，服务器和服务器之间访问没有跨域问题
 
-  - 将浏览器的api请求代理到本地开发服务器，再由本地开发服务器代理请求到真正的api服务器
+  - 将浏览器的api请求代理到本地开发服务器，再由本地开发服务器代理请求到真正的api服务器。
+  
+### SourceMap
+
+webpack自动编译的缺点：项目真正运行时运行的是打包后经过编译转换后的代码，出现了bug，不太方便定位bug在源码的哪里。
+
+解决：SourceMap：源代码地图，定义了编译转换后的代码和源码之间的映射关系
+通过sourcemap文件，可以逆向得到源代码
+
+#### sourceMap文件主要属性：
+
+- version：当前文件使用的sourcemap版本
+- sources： [] ，转换之前的源文件是哪些
+- names：源代码中使用的成员名称
+- mappings： 转换之前和转换之后的字符之间的映射关系，采用xx编码
+#### sourceMap文件的使用
+
+项目文件结构：jquery-3.6.3.js是源文件，并没有在项目中使用
 
 
 
+- ![截屏2023-02-14 下午3.06.36](/Users/neil/Library/Application Support/typora-user-images/截屏2023-02-14 下午3.06.36.png)
+- 1.项目中index.html用到的是压缩文件 jquery.min.js
+ ```js
+  <body>
+      <script src="jquery-3.6.3.min.js"></script>
+  
+      <script>
+          const body = document.body;
+          console.log(body);
+      </script>
+  </body>
+ ```
 
+- 2.在压缩文件代码最后面加上：
 
+```js//# sourceMappingURL=jquery-3.6.3.min.map
 
+//# sourceMappingURL=jquery-3.6.3.min.map
 
-​    
+```
 
+- 3.启动本地服务serve. ,你会发现项目中没用到的源代码也出现在了调试面板中。这样你在debug使用了压缩文件的页面时，你会发现你居然也可以在源文件中打断点进行调试
 
+### webpack中配置sourceMap
 
+#### devtool的souce-map模式
 
+- devtool: "source-map"
+
+  - 1.打包以后自动生成.map文件
+  - 2.自动在压缩文件末尾添加一行 //# sourceMappingURL=压缩问价名
+
+- 测试效果：
+
+  - cd到打包输出目录, 运行一个服务serve .
+  - 调出调试面板，这是可以在控制台log提示中直接点进去，定位到源代码出错的地方
+
+  
+
+webpack支持的生成sourceMap的方式有很多种（12种）
+
+#### devtool的其他模式
+
+##### eval模式
+
+- eval是一个函数，可以运行js代码, 指定运行环境
+  - 通过sourceURL指定eval函数里包的代码运行在哪里，这里运行在了bundle.js里，这只是一个标识![截屏2023-02-14 下午3.30.08](/Users/neil/Library/Application Support/typora-user-images/截屏2023-02-14 下午3.30.08.png)
+
+- 缺点：devtool的eval模式，只能根据控制台的提示，定位错误出现在哪个文件
+
+- devtool eval模式的实现原理：将每个模块的代码包在eval函数里执行，并在最后面用sourceURL指定运行环境的文件名（模块文件名）
+
+  
+
+###### 
 
