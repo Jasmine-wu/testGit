@@ -16,21 +16,37 @@ module.exports = {
     module: {
         // 针对其他资源的加载规则
         rules: [{
-            // 加载css文件
-            test: /\.css$/,
-            use: ["style-loader", "css-loader"]
-        }, {
-            // 加载图片资源
-            test: /\.(png|jpeg|jpg|gif)$/,
-            // use: "file-loader"
-            use: {
-                loader: "url-loader",
-                options: {
-                    // <10kb- url-loader >10kb->file-laoder
-                    limit: 10 * 1024
+                // 1.加载css文件
+                test: /\.css$/,
+                use: ["style-loader", "css-loader"]
+            }, {
+                // 2.加载图片资源
+                test: /\.(png|jpeg|jpg|gif)$/,
+                // use: "file-loader"
+                use: {
+                    loader: "url-loader",
+                    options: {
+                        // <10kb- url-loader >10kb->file-laoder
+                        limit: 10 * 1024
+                    }
+                }
+            },
+
+            // 3.转译高版本代码，兼容各个浏览器，有些浏览器还未支持语言的最新特性
+            {
+                test: /\.js$/,
+                exclude: /node-module/,
+                use: {
+                    loader: "babel-loader?cacheDirectory",
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+
                 }
             }
-        }],
+
+
+        ],
     }
 
 }
