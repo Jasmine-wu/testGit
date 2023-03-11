@@ -1,0 +1,23 @@
+<!-- <script src="./src/index.js"></script> -->
+<!-- 会报错， require not define -->
+
+<script>
+  // bundle.js原型
+  (function (list) {
+    function require(filename) {
+      let exports = {};
+
+      (function (exports, code) {
+        eval(code);
+      })(exports, list[filename]);
+
+      return exports;
+    }
+    // 最开始从入口函数执行
+    require("index.js");
+  })({
+    //依赖关系
+    "add.js": "exports.default = function (a, b){return a+b};",
+    "index.js": "var add = require('add.js').default;console.log(add(1, 2));",
+  });
+</script>

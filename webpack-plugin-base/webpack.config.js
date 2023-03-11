@@ -45,7 +45,7 @@ module.exports = {
         }),
 
         // 自动复制指定资源到输出目录
-        // 实际开发阶段不要用这个插件，而是指定dev server的
+        // 实际开发阶段不要用这个插件，而是指定dev server的contentBase
         // new CopyWebpackPlugin([
         //     "./src/public" //复制public目录下的资源
         // ])
