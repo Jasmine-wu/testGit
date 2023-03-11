@@ -176,8 +176,6 @@ index.html
    - yarn add @babel/preset-env: 编译es6代码
    - Yarn add @babel/core： 使用babel需要这个核心模块
 3. 代码实现
-  - 1. 
-
 
 
 
