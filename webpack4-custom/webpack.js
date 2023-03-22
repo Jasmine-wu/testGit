@@ -91,50 +91,7 @@ function bundle(file) {
     })(${depsGraph})`;
 }
 
-const content = bundle("./src/index.js")
+const content = bundle("./src/index.js");
 
 !fs.existsSync("./dist") && fs.mkdirSync("./dist");
 fs.writeFileSync("./dist/bundle.js", content);
-
-/***
-
-neil@NeildeMacBook-Pro my-webpack2 % node webpack.js
-{
-  './src/index.js': {
-    deps: { './add.js': './src/add.js', './add2.js': './src/add2.js' },
-    code: '"use strict";\n' +
-      '\n' +
-      'var _add = _interopRequireDefault(require("./add.js"));\n' +
-      'var _add2 = _interopRequireDefault(require("./add2.js"));\n' +
-      'function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }\n' +
-      'console.log((0, _add["default"])(1, 2));\n' +
-      'console.log((0, _add2["default"])(1, 2));'
-  },
-  './src/add.js': {
-    deps: {},
-    code: '"use strict";\n' +
-      '\n' +
-      'Object.defineProperty(exports, "__esModule", {\n' +
-      '  value: true\n' +
-      '});\n' +
-      'exports["default"] = void 0;\n' +
-      'var _default = function _default(a, b) {\n' +
-      '  return a + b;\n' +
-      '};\n' +
-      'exports["default"] = _default;'
-  },
-  './src/add2.js': {
-    deps: {},
-    code: '"use strict";\n' +
-      '\n' +
-      'Object.defineProperty(exports, "__esModule", {\n' +
-      '  value: true\n' +
-      '});\n' +
-      'exports["default"] = void 0;\n' +
-      'var _default = function _default(a, b) {\n' +
-      '  return a + b + 2;\n' +
-      '};\n' +
-      'exports["default"] = _default;'
-  }
-} 
-***/
